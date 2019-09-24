@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="./fontawesome-free-5.10.2-web/css/all.css">
+
+    <title>JS Orbiter</title>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-light bg-light">
+        <span class="navbar-brand mb-0 h1">JS Orbiter</span>
+      </nav>
+
+
+      <div class="card mt-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <canvas id="orbiter-canvas" width="512" height="512" style="border:1px solid #000000;">
+              </canvas>
+              <div class="mt-1">
+                <button type="button" class="btn btn-light" id="slow-button"><i class="fas fa-backward"></i></button>
+                <button type="button" class="btn btn-light" id="pause-play-button"><i class="fas fa-pause"></i></button>
+                <button type="button" class="btn btn-light" id="fast-button"><i class="fas fa-forward"></i></button>
+                <button type="button" class="btn btn-light" id="zoom-out-button"><i class="fas fa-search-minus"></i></button>
+                <button type="button" class="btn btn-light" id="zoom-in-button"><i class="fas fa-search-plus"></i></button>
+              </div>
+            </div>
+            <div class="col">
+
+              <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                  <a class="nav-link active" id="bodies-tab-link" href="#">Bodies</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="presets-tab-link" href="#">Presets</a>
+                </li>
+              </ul>
+
+              <div id="bodies-tab">
+                <div id="body-list"></div>
+                <button class="btn btn-outline-secondary" type="button" id="new-body-button" style="width: 2.5em"><i class="fas fa-plus"></i></button>
+              </div>
+
+              <div id="presets-tab" style="display: none">
+                <div class="list-group">
+                  <a href="#" class="list-group-item list-group-item-action preset-button" data-preset="sun-earth-moon">Sun, Earth, and Moon</a>
+                  <a href="#" class="list-group-item list-group-item-action preset-button" data-preset="4-body-tango">4 Body Tango</a>
+                  <a href="#" class="list-group-item list-group-item-action preset-button" data-preset="double-sun">Double Sun</a>
+                  <a href="#" class="list-group-item list-group-item-action preset-button" data-preset="figure-eight">Figure Eight</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="templates" style="display: none">
+      <!-- default body menu -->
+      <div class="body-menu mb-3">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <button class="btn btn-secondary body-menu-save-edit" type="button" style="width: 2.5em"><i class="fas fa-edit"></i></button>
+          </div>
+          <input type="text" class="form-control name-textbox" value="new body" disabled>
+          <div class="input-group-append">
+            <button class="btn btn-secondary body-delete-button" type="button" style="width: 2.5em" disabled><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </div>
+        <div class="input-group color-input">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 4em">Color</span>
+          </div>
+          <input type="text" class="form-control color-textbox" value="555555" disabled>
+        </div>
+        <div class="input-group radius-input">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 4em">Radius</span>
+          </div>
+          <input type="text" class="form-control radius-textbox" value="1.0" disabled>
+        </div>
+        <div class="input-group mass-input">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 4em">Mass</span>
+          </div>
+          <input type="text" class="form-control mass-textbox" value="1.0" disabled>
+          <div class="input-group-append">
+            <span class="input-group-text" style="width: 3em">kg</span>
+          </div>
+        </div>
+        <div class="input-group pos-input">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 2.5em">X</span>
+          </div>
+          <input type="text" class="form-control pos-x-textbox" value="0.0" disabled>
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 2.5em">Y</span>
+          </div>
+          <input type="text" class="form-control pos-y-textbox" value="0.0" disabled>
+          <div class="input-group-append">
+            <span class="input-group-text" style="width: 3em">m</span>
+          </div>
+        </div>
+        <div class="input-group vel-input">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 2.5em">Vₓ</span>
+          </div>
+          <input type="text" class="form-control vel-x-textbox" value="0.0" disabled>
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 2.5em">Vᵧ</span>
+          </div>
+          <input type="text" class="form-control vel-y-textbox" value="0.0" disabled>
+          <div class="input-group-append">
+            <span class="input-group-text" style="width: 3em">m/s</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="./scripts/orbitFuncs.js"></script>
+    <script src="./scripts/orbiter.js"></script>
+    <script src="./scripts/menu.js"></script>
+  </body>
+
+
+</html>
